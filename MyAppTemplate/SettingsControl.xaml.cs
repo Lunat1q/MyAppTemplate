@@ -12,31 +12,32 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MyAppTemplate.Data;
+using MyAppTemplate.Settings;
+using TiqUtils.Wpf.UIBuilders;
 
 namespace MyAppTemplate
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for SettingsControl.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class SettingsControl : UserControl
     {
-        private readonly DataContext _context = new DataContext();
-
-        public MainWindow()
+        public SettingsControl()
         {
             InitializeComponent();
-            this.DataContext = this._context;
+            AppSettings.Settings.CreateAutoSettingsControl(this.ContentControl);
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
+        public event EventHandler OnSave;
 
+        protected virtual void OnOnSave()
+        {
+            this.OnSave?.Invoke(this, EventArgs.Empty);
         }
 
-        private void SettingsSaved(object sender, EventArgs eventArgs)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            AppSettings.Settings.Save();
         }
     }
 }
